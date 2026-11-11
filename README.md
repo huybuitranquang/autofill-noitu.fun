@@ -1,5 +1,6 @@
-# Viet Ngu Auto-Fill (Vua Tieng Viet / noitu.fun)
+# autofill_noitu.fun (v1.0.0)
 
+[](https://github.com)
 [](https://github.com/SuperMonster003/AutoJs6)
 [](https://github.com/autox-community/AutoX)
 [](https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Rhino)
@@ -24,8 +25,8 @@ Powered by Android **Accessibility Services** via [AutoJs6](https://github.com/S
 ## Project Structure
 
 ```text
-├── viet_ngu_autofill_android.js   # Production script for AutoJs6 / AutoX.js (Android)
-├── viet_ngu_ai.html              # Standalone 4-in-1 web training & simulation interface
+├── autofill_noitu.fun.js         # Production script for AutoJs6 / AutoX.js (v1.0.0)
+├── viet_ngu_ai.html              # Standalone web training & simulation interface
 └── README.md                     # Repository documentation & installation guide
 ```
 
@@ -42,12 +43,12 @@ Open AutoJs6 or AutoX.js, slide open the left navigation drawer (`☰`), and ena
 2. **Floating Window (Display over other apps)**: Required for rendering the status HUD over active games.
 
 ### 3. Load the Script into AutoJs6
-1. Copy the complete source code from `viet_ngu_autofill_android.js`.
-2. Inside AutoJs6, tap the **`(+)`** button in the bottom right corner → select **New File** → name it `viet_ngu_autofill.js`.
+1. Copy the complete source code from `autofill_noitu.fun.js`.
+2. Inside AutoJs6, tap the **`(+)`** button in the bottom right corner → select **New File** → name it `autofill_noitu.fun.js`.
 3. Paste the code into the editor and tap the **Save** icon.
 
 ### 4. Run & Play
-1. Tap the triangular **Run (`▶`)** button. A compact dark floating HUD titled **⚡ Vua Tiếng Việt V5** will appear near the top of your screen.
+1. Tap the triangular **Run (`▶`)** button. A compact dark floating HUD titled **⚡ autofill_noitu.fun v1.0.0** will appear near the top of your screen.
 2. Launch your browser to [noitu.fun](https://www.noitu.fun/) or open your target word puzzle game.
 3. As puzzle rounds begin, the floating overlay automatically analyzes game states:
    * **`[Tự điền: BẬT/TẮT]`**: Toggle automatic text injection and coordinate taps.
