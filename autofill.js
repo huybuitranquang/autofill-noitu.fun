@@ -1,10 +1,6 @@
-// VIỆT NGỮ AUTO-FILL V6.0 — NOITU.FUN / VUA TIẾNG VIỆT
-// Accessibility trước. OCR (gmlkit / paddle) chỉ khi không đọc được đề.
-
 "auto";
 auto.waitFor();
 
-// ---------------- 1. KHO 8.152 TỪ GHÉP & TỪ LÁY 2 TIẾNG CHUẨN (4 GÓI < 25KB) ----------------
 var CURATED_VTV = [
   "nam cực|vùng đất lạnh giá băng tuyết điểm cực nam trái đất",
   "bắc cực|vùng băng tuyết lạnh giá điểm cực bắc trái đất",
@@ -310,7 +306,6 @@ function sapXepKyTu(str) {
     .join("");
 }
 
-// Tạo Khung Âm Chính Tả để gom nhóm 4-6 nút đáp án trong Cảnh Sát Chính Tả
 function khungAmChinhTa(word2Syl) {
   var s = boDau(String(word2Syl || "").toLowerCase().trim());
   var parts = s.split(/\s+/);
@@ -331,10 +326,9 @@ function khungAmChinhTa(word2Syl) {
   return norm.join(" ");
 }
 
-// ---------------- 2. KHỞI TẠO CHỈ MỤC 8.152 TỪ OFFLINE + 74K TỪ ONLINE ----------------
 var DICT = [];
 var WORD_MAP = {};
-var CORE_WORD_MAP = {}; // Đánh dấu các từ thuộc bộ 8.152 từ thông dụng để ưu tiên trong Nối từ
+var CORE_WORD_MAP = {};
 var SINGLE_SYL_MAP = {};
 var SYL_FREQ_MAP = {};
 var FIRST_SYL_MAP = {};
@@ -417,13 +411,11 @@ function addWordToIndex(w, meaningStr, isCore) {
   LEN_BUCKET[totalKey].push(entry);
 }
 
-// Nạp 166 từ có định nghĩa chi tiết trước tiên
 for (var i = 0; i < CURATED_VTV.length; i++) {
   var row = CURATED_VTV[i].split("|");
   addWordToIndex(row[0], row[1] || "", true);
 }
 
-// Nạp 8.152 từ ghép & từ láy thông dụng (4 gói)
 var ALL_PACKS = [DICT_PACK_1, DICT_PACK_2];
 for (var pIdx = 0; pIdx < ALL_PACKS.length; pIdx++) {
   var wList = ALL_PACKS[pIdx].split("|");
@@ -432,7 +424,6 @@ for (var pIdx = 0; pIdx < ALL_PACKS.length; pIdx++) {
   }
 }
 
-// Tải ngầm Viet74K. Từ lõi (isCore) vẫn được ưu tiên khi nối từ.
 var dictBusy = false;
 function capNhatSoTu() {
   if (typeof floatWin === "undefined" || !floatWin || !floatWin.txtCount) return;
@@ -479,12 +470,11 @@ threads.start(function() {
   }
 });
 
-// ---------------- 3. GIAO DIỆN BẢNG NỔI V5.0 (GỌN NHẸ, ĐẶT SÁT MÉP TRÊN) ----------------
 var floatWin = floaty.window(
   <frame bg="#eb0f172a" cornerRadius="14" padding="8">
     <vertical>
       <horizontal gravity="center_vertical">
-        <text id="dragHandle" text="⚡ Vua Tiếng Việt V6" textColor="#34d399" textSize="11sp" textStyle="bold" />
+        <text id="dragHandle" text="autofill noitu.fun" textColor="#34d399" textSize="11sp" textStyle="bold" />
         <text id="btnModeToggle" text=" [Tự điền: BẬT] " textColor="#38bdf8" textSize="10sp" textStyle="bold" marginLeft="4" />
         <text id="btnAutoSendToggle" text=" [Tự gửi: TẮT] " textColor="#fbbf24" textSize="10sp" textStyle="bold" marginLeft="4" />
         <text id="btnCloseWin" text=" ✕ " textColor="#f87171" textSize="12sp" textStyle="bold" marginLeft="6" />
@@ -502,6 +492,9 @@ var floatWin = floaty.window(
         <text id="btnCand1" text="" bg="#1e293b" textColor="#e2e8f0" textSize="11sp" textStyle="bold" padding="7 4" marginRight="4" />
         <text id="btnCand2" text="" bg="#1e293b" textColor="#e2e8f0" textSize="11sp" textStyle="bold" padding="7 4" />
       </horizontal>
+      <horizontal w="*" gravity="right" marginTop="2">
+        <text id="txtVersion" text="1.0.0" textColor="#64748b" textSize="9sp" />
+      </horizontal>
     </vertical>
   </frame>
 );
@@ -510,7 +503,7 @@ floatWin.setPosition(20, 45);
 
 var autoFillEnabled = true;
 var autoSendEnabled = false;
-var ocrMode = "auto"; // auto | on | off
+var ocrMode = "auto";
 var screenCaptureOn = false;
 var screenCaptureTried = false;
 var lastOcrAt = 0;
@@ -573,11 +566,10 @@ floatWin.btnOcrToggle.click(function() {
   });
 });
 
-// ---------------- 4. TÌM ĐÚNG Ô NHẬP LIỆU CỦA GAME & THỰC THI ĐIỀN / CHẠM ----------------
 function timOEditTextGame() {
   var edits = className("android.widget.EditText").visibleToUser(true).find();
   if (edits && edits.length > 0) {
-    // Loại bỏ thanh địa chỉ trình duyệt ở sát mép trên (top < 180)
+
     var validEdits = [];
     for (var i = 0; i < edits.length; i++) {
       var b = edits[i].bounds();
@@ -716,7 +708,6 @@ floatWin.btnCand0.click(function() { if (currentCandidates[0]) thucThiDienHoacCh
 floatWin.btnCand1.click(function() { if (currentCandidates[1]) thucThiDienHoacChamV5(currentCandidates[1], ""); });
 floatWin.btnCand2.click(function() { if (currentCandidates[2]) thucThiDienHoacChamV5(currentCandidates[2], ""); });
 
-// ---------------- 5. CHẤM ĐIỂM GỢI Ý VÁ TỪ & CHẤM ĐIỂM CẢNH SÁT CHÍNH TẢ ----------------
 function chamDiemGoiYVaTu(entry, hintSentence) {
   if (!hintSentence) return 0;
   var lowerH = hintSentence.toLowerCase();
@@ -769,7 +760,6 @@ function chamDiemChinhTaV5(rawWord) {
     if (SINGLE_SYL_MAP[syl]) score += 25;
     else score -= 60;
 
-    // Luật âm tiết đóng p, t, c, ch BẮT BUỘC phải mang dấu sắc hoặc dấu nặng
     if (/(p|t|c|ch)$/.test(nt)) {
       var hasSacNang = /[áắấéếíóốớúứýạặậẹệịọộợụựỵ]/.test(syl);
       var hasWrongTone = /[àằầèềìòồờùừỳảẳẩẻểỉỏổởủửỷãẵẫẽễĩõỗỡũữỹ]/.test(syl);
@@ -828,7 +818,6 @@ function laHangBanPhim(chars) {
   return s.indexOf("qwert") !== -1 || s.indexOf("asdfg") !== -1 || s.indexOf("zxcv") !== -1 || s.indexOf("12345") !== -1;
 }
 
-// ---------------- 6. BỘ PHÂN TÍCH MÀN HÌNH V5 (CHỐNG NHIỄU BÀN PHÍM & TIÊU ĐỀ WEB) ----------------
 function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
   var sh = device.height || 2400;
   if (laManNghi(items)) {
@@ -847,7 +836,6 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
   var editVal = editBoxInfo ? editBoxInfo.val : "";
   var editHint = editBoxInfo ? editBoxInfo.hint : "";
 
-  // 1. NHẬN DIỆN CHẾ ĐỘ CHƠI CHÍNH XÁC (Không bao giờ bị tiêu đề "Nối Từ Online" đánh lừa!)
   var hasChinhTaBadge = false;
   var hasGhepChuBadge = false;
   var hasVaTuBadge = false;
@@ -863,7 +851,7 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
   for (var i = 0; i < items.length; i++) {
     var raw = items[i].text.trim();
     var low = raw.toLowerCase();
-    // Chỉ xét các thẻ ngắn (<= 28 ký tự) để loại bỏ tiêu đề trang web dài "Nối Từ Online - Solo..."
+
     if (raw.length <= 28) {
       if (low.indexOf("cảnh sát chính tả") !== -1 || low.indexOf("chọn từ đúng") !== -1 || low.indexOf("chọn từ sai") !== -1 || low === "chính tả") {
         hasChinhTaBadge = true;
@@ -877,15 +865,12 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     }
   }
 
-  // =========================================================================
-  // ƯU TIÊN 1: 🚨 CẢNH SÁT CHÍNH TẢ (Nhận diện cả qua Badge lẫn Cụm Đáp Án Gần Âm)
-  // =========================================================================
   var twoSylCandidates = [];
   var seenOpt = {};
   for (var m = 0; m < items.length; m++) {
     var it = items[m];
     if (it.cy < 160) continue;
-    // Tách nếu 1 node chứa nhiều dòng
+
     var subLines = it.text.split(/\r?\n/);
     for (var sl = 0; sl < subLines.length; sl++) {
       var cl = subLines[sl].trim().toLowerCase().replace(/\s+/g, " ");
@@ -909,7 +894,6 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     }
   }
 
-  // Kiểm tra xem có cụm >= 3 đáp án cùng Khung Âm Chính Tả trên màn hình không (VD: lung băt, lùng bặc, lung bắt, dùng bắt, lùng băt, lùng bắt)
   var skelCounts = {};
   var maxSkelCount = 0;
   for (var sc = 0; sc < twoSylCandidates.length; sc++) {
@@ -946,10 +930,6 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     };
   }
 
-  // =========================================================================
-  // ƯU TIÊN 2: 🧩 GHÉP CHỮ (Ảnh 3 & Ảnh 6: [o][T][á][u][ế][t] -> TẾU TÁO)
-  // Chỉ quét các ô chữ nằm PHÍA TRÊN ô nhập liệu (cy < editTop) để loại bỏ 100% bàn phím!
-  // =========================================================================
   var tilesAboveInput = [];
   for (var t = 0; t < singleTiles.length; t++) {
     var tile = singleTiles[t];
@@ -958,7 +938,6 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     }
   }
 
-  // Gom cụm ô chữ cùng hàng. Dung sai rộng vì vòng tròn chữ cao hơn 35px.
   var rowTol = Math.max(56, Math.round(sh * 0.03));
   var bestTileRow = [];
   for (var r1 = 0; r1 < tilesAboveInput.length; r1++) {
@@ -974,7 +953,6 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     }
   }
 
-  // Trình duyệt gộp cả hàng thành 1 chuỗi: "a g L ạ t ừ" hoặc "agLạtừ"
   if (bestTileRow.length < 4 && hasGhepChuBadge) {
     var letterReG = /^[a-zA-ZàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđĐ]$/;
     for (var gm = 0; gm < items.length; gm++) {
@@ -1022,7 +1000,7 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
       }
 
       if (matches.length > 0) {
-        // Ưu tiên từ nằm trong bộ 8.152 từ chuẩn lên trước
+
         matches.sort(function(a, b) {
           var scoreA = (a.isCore ? 50 : 0) + (ghepHint ? chamDiemGoiYVaTu(a, ghepHint) : 0);
           var scoreB = (b.isCore ? 50 : 0) + (ghepHint ? chamDiemGoiYVaTu(b, ghepHint) : 0);
@@ -1057,15 +1035,12 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     }
   }
 
-  // =========================================================================
-  // ƯU TIÊN 3: 🎟️ VÁ TỪ (Ảnh 1 & 2: "n a _   c _ _" + Gợi ý ở giây 13)
-  // =========================================================================
   var pat1 = "", pat2 = "";
   var displayPattern = "";
 
   for (var v = 0; v < items.length; v++) {
     var itV = items[v];
-    if (itV.cy > editTop) continue; // Chỉ quét phía trên ô nhập liệu
+    if (itV.cy > editTop) continue;
     var lineV = itV.text.trim().replace(/[—–−＿▢□☐]/g, "_");
     if (lineV.indexOf("_") !== -1 && lineV.length >= 3 && lineV.length <= 30) {
       displayPattern = lineV;
@@ -1182,13 +1157,10 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
     };
   }
 
-  // =========================================================================
-  // ƯU TIÊN 4: 🔗 NỐI TỪ — không đoạt màn đã có mẫu gạch dưới / ô ghép chữ
-  // =========================================================================
   if (hasNoiTuBadge) {
     currentMode = "NOI_TU";
     var promptWord = "";
-    // Chỉ tìm thẻ từ gốc nằm PHÍA TRÊN ô nhập liệu (cy < editTop) để không bao giờ đọc nhầm Gboard clipboard ("📋 hoa bia") hay bóng chat!
+
     for (var n = 0; n < items.length; n++) {
       var itN = items[n];
       if (itN.cy > 140 && itN.cy < editTop - 10) {
@@ -1215,7 +1187,7 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
       if (pool.length === 0) {
         pool = (FIRST_SYL_NOTONE_MAP[boDau(seedSyl)] || []).slice();
       }
-      // Luôn ưu tiên từ thông dụng trong bộ 8.152 từ chuẩn (isCore == 1) lên trước để không bao giờ điền từ hiếm như "hoa bia"!
+
       pool.sort(function(a, b) {
         var sA = (a.isCore ? 5000 : 0) + (SYL_FREQ_MAP[a.p2] || 0);
         var sB = (b.isCore ? 5000 : 0) + (SYL_FREQ_MAP[b.p2] || 0);
@@ -1278,10 +1250,9 @@ function phanTichManHinhV5(items, singleTiles, editBoxInfo) {
   return null;
 }
 
-// ---------------- 7. ĐỌC MÀN HÌNH: ACCESSIBILITY, OCR KHI THIẾU CHỮ ----------------
 function laChuBangNoi(clean) {
   if (!clean) return true;
-  if (clean.indexOf("Vua Tiếng Việt V6") !== -1 || clean.indexOf("Vua Tiếng Việt V5") !== -1) return true;
+  if (clean.indexOf("autofill noitu.fun") !== -1 || clean.indexOf("1.0.0") !== -1) return true;
   if (clean.indexOf("Đang quét màn hình") !== -1) return true;
   if (clean.indexOf("[Tự điền:") !== -1 || clean.indexOf("[Tự gửi:") !== -1) return true;
   if (clean.indexOf("OCR:") === 0) return true;
